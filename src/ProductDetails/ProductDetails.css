@@ -1,0 +1,41 @@
+label {
+    width: 100px;
+    display:inline-block;
+    margin: 2px;
+    color: black;
+    margin-bottom: 2px;
+}
+
+input {
+    width: 200px;
+    margin-bottom: 2px;
+}
+
+textarea {
+    width: 300px;
+    margin: 2px;
+    height: 100px;
+}
+
+.newItem{
+    background-color: green;
+    color: azure;
+    margin-right: 15px;
+}
+
+.deleteItem{
+    background-color: rgba(255, 0, 0, 0.555);
+    color: azure;
+    margin-left: 15px;
+}
+
+#div-item-details{
+    background-color: aquamarine;
+    margin-right: 20px;
+    padding: 20px;
+    height: 300px;
+}
+
+#action-section{
+    margin-top: 20px;
+}
