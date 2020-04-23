@@ -63,41 +63,33 @@
     }
 
     newProductHandler = () => {
-      //set the selectedWine in the state to the newWineTemplate which will clear the fields
       this.setState({ selectedItem: this.newItemTemplate });
     }
 
-    //This function handles the onChange events from the input fields in the WineDetails component.
-    //This function needs the original event information to know which input has changed (i.e. the target of the event)
-    //hense we pass the event as a parameter
-    wineDetailsChangedHandler = (event) => {
-      const updatedSelectedWine = { ...this.state.selectedItem };
-      updatedSelectedWine[event.target.name] = event.target.value;
-      this.setState({ selectedItem: updatedSelectedWine });
+    itemDetailsChangedHandler = (event) => {
+      const updatedSelectedItem = { ...this.state.selectedItem };
+      updatedSelectedItem[event.target.name] = event.target.value;
+      this.setState({ selectedItem: updatedSelectedItem });
     }
 
-    saveWineHandler = (id) => {
+    saveItemHandler = (id) => {
       if (id) {
         axios.put(Constants.API_ITEMS, this.state.selectedItem)
           .then(response => {
-            //again after updating we'll refresh our list of wine summaries from the wine-manager service
             this.fetchProductSummaries(this.state.currentPage, this.state.sortKey);
           });
       }
       //remember our Id text input field is disabled so when new is clicked it will be empty always!
       else {
-        //again we use axios to send the POST request. This time the second parameter is the data that will be
-        //sent in the body of the HTTP request. In this case it will be our selectedWine from our state.
         axios.post(Constants.API_ITEMS, this.state.selectedItem)
           .then(response => {
-            //again after updating we'll refresh our list of wine summaries from the wine-manager service
             this.fetchProductSummaries(0, this.state.sortKey);
           });
       }
     }
 
     //This is one of the component lifecycle events that we can override. We'll use this to make our initial call
-    //to our wine-manager REST api once the App component has beem mounted into the DOM and is ready for updates.
+    //to our  REST api once the App component has beem mounted into the DOM and is ready for updates.
     componentDidMount() {
       this.fetchProductSummaries(0, this.state.sortKey);
     }
@@ -127,30 +119,27 @@
     //React component that will be rendered to represent this component. This is typically some JSX which will be
     //transpiled to JavaScript so that it can run in any browser.
     render() {
-      let wineSummariesList = <p>Unable to fetch Product summaries</p>
+      let itemSummariesList = <p>Unable to fetch Product summaries</p>
       let pageTagDisplay = this.state.currentPage + 1
       let totalPagesDisplay = this.state.totalPages
-      wineSummariesList = this.state.itemSummaries.map(wineSummary => {
+      itemSummariesList = this.state.itemSummaries.map(itemSummary => {
         return <ProductSummary
-          key={wineSummary.id}
-          id={wineSummary.id}
-          description={wineSummary.description}
-          name={wineSummary.name}
-          price={wineSummary.price}
-          rating={wineSummary.rating}
-          clickHandler={() => this.onClickHandler(wineSummary.id)}
+          key={itemSummary.id}
+          id={itemSummary.id}
+          description={itemSummary.description}
+          name={itemSummary.name}
+          price={itemSummary.price}
+          rating={itemSummary.rating}
+          clickHandler={() => this.onClickHandler(itemSummary.id)}
         />
       })
 
-      //similarly for our wineDetails component we initially set it to a message field asking to select a wine summary
-      let wineDetails
-      //if a wine summary has been selected
+      let itemDetails
       if (this.state.selectedItem) {
-        //we update the wineDetails variable with the new <WineDetails/> react component
-        wineDetails = <ProductDetails item={this.state.selectedItem}
-          valueChanged={(event) => this.wineDetailsChangedHandler(event)}
+        itemDetails = <ProductDetails item={this.state.selectedItem}
+          valueChanged={(event) => this.itemDetailsChangedHandler(event)}
           deleteClickHander={() => this.deleteProductHandler(this.state.selectedItem.id)}
-          saveClickHander={() => this.saveWineHandler(this.state.selectedItem.id)}
+          saveClickHander={() => this.saveItemHandler(this.state.selectedItem.id)}
           newClickHander={() => this.newProductHandler()} />
       }
       return (
@@ -164,7 +153,7 @@
               <option value="2">Good Ratings</option>
               <option value="3">Poor Ratings</option>
             </select>
-            {wineSummariesList}
+            {itemSummariesList}
             <div>
               <button id="previous" onClick={() => this.onPreviousPageClickHandler()}>Previous</button>
           &nbsp; {pageTagDisplay} / {totalPagesDisplay} &nbsp;
@@ -174,7 +163,7 @@
 
           <div style={style2}>
 
-            {wineDetails}
+            {itemDetails}
           </div>
         </div>
       );
