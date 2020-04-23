@@ -148,6 +148,7 @@
             <h1>E-Shop Product List</h1>
             Sort by &nbsp;
             <select onChange={this.handleChange}>
+              <option value="-1" selected="true">Product Id</option>
               <option value="0">Cheapest Price</option>
               <option value="1">Highest Price</option>
               <option value="2">Good Ratings</option>
